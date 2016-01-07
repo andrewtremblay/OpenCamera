@@ -1,0 +1,32 @@
+package com.andrewtremblayllc.opencam.shaders;
+
+/**
+ * Created on 1/7/16.
+ */
+public class FlippedShader {
+    public static final String VertexShader =
+            "uniform mat4 uMVPMatrix;\n" +
+                    "uniform mat4 uSTMatrix;\n" +
+                    "uniform float uCRatio;\n" +
+                    "attribute vec4 aPosition;\n" +
+                    "attribute vec4 aTextureCoord;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "varying vec2 vTextureNormCoord;\n" +
+                    "void main() {\n" +
+                    "  vec4 scaledPos = aPosition;\n" +
+                    "  scaledPos.x = scaledPos.x * uCRatio;\n" +
+                    "  scaledPos.y = -scaledPos.y;\n" +
+                    "  gl_Position = uMVPMatrix * scaledPos;\n" +
+                    "  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n" +
+                    "  vTextureNormCoord = aTextureCoord.xy;\n" +
+                    "}\n";
+    public static final String FragmentShader =
+            "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "varying vec2 vTextureNormCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "  gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
+                    "}\n";
+}
